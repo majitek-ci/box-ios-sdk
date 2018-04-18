@@ -216,10 +216,11 @@
         
         return;
     }
-    
+    NSString *refreshToken = self.refreshToken;
+    NSString *accessToken = self.accessToken;
     NSMutableDictionary *POSTParams = [NSMutableDictionary dictionaryWithDictionary:@{
                                                                                       BOXAuthTokenRequestGrantTypeKey : BOXAuthTokenRequestGrantTypeRefreshToken,
-                                                                                      BOXAuthTokenRequestRefreshTokenKey : self.refreshToken,
+                                                                                      BOXAuthTokenRequestRefreshTokenKey : refreshToken,
                                                                                       BOXAuthTokenRequestClientIDKey : self.clientID,
                                                                                       BOXAuthTokenRequestClientSecretKey : self.clientSecret,
                                                                                       }];
@@ -236,6 +237,8 @@
                                                                                          body:POSTParams
                                                                                   queryParams:nil
                                                                                       session:self];
+    //important to record the right accessToken associated with the refreshToken used in the access token request
+    operation.accessToken = accessToken;
     
     operation.success = ^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *JSONDictionary)
     {
